@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.util.Log;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager p2pManager;
@@ -27,6 +28,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if(p2pManager != null){
                 p2pManager.requestPeers(channel, activity.peerListListener);
             }
+            Log.e("MANAGER NULO", "EL MANAGER NO ESTÁ INICIALIZADO");
         } else if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
         {
             //responde to new connection or disconnections
