@@ -12,6 +12,8 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -23,9 +25,18 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
     List<WifiP2pDevice> peers = new ArrayList<>();
     String[] deviceNameArray;
     WifiP2pDevice[] deviceArray;
+
+    Socket socket;
+
+    ServerClass serverClass;
+    ClientClass clientClass;
+
+    boolean isHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
-                        connectionStatus.setText("Se está bucando dispositivos");
+                        connectionStatus.setText("Se está buscando dispositivos");
                     }
 
                     @Override
@@ -99,6 +117,24 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(int reason) {
                         connectionStatus.setText("No se pudo realizar la conexión");
 
+                    }
+                });
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                final String msg = typeMsg.getText().toString();
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (msg != null && isHost){
+                            serverClass.write(msg.getBytes());
+                        } else if (msg != null && !isHost){
+                            clientClass.write(msg.getBytes());
+                        }
                     }
                 });
             }
@@ -161,8 +197,14 @@ public class MainActivity extends AppCompatActivity {
             final InetAddress groupOwnerAddress = info.groupOwnerAddress;
             if(info.groupFormed && info.isGroupOwner){
                 connectionStatus.setText("Anfitrión");
+                isHost = true;
+                serverClass = new ServerClass();
+                serverClass.start();
             } else if(info.groupFormed){
                 connectionStatus.setText("Cliente");
+                isHost = false;
+                clientClass = new ClientClass(groupOwnerAddress);
+                clientClass.start();
             }
         }
     };
@@ -177,5 +219,122 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(receiver);
+    }
+
+    public class ServerClass extends Thread{
+        ServerSocket serverSocket;
+        private InputStream inputStream;
+        private OutputStream outputStream;
+
+        public void write(byte[] bytes){
+            try {
+                outputStream.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run(){
+            try {
+                serverSocket = new ServerSocket(8888);
+                socket = serverSocket.accept();
+                inputStream = socket.getInputStream();
+                outputStream = socket.getOutputStream();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            final Handler handler = new Handler(Looper.getMainLooper());
+
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final byte[] buffer = new byte[1024];
+                    int bytes;
+
+                    while (socket !=null){
+                        try {
+                            bytes = inputStream.read(buffer);
+                            if (bytes>0){
+                                final int finalBytes = bytes;
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String tempMsg = new String(buffer, 0, finalBytes);
+                                        messageTextView.setText(tempMsg);
+                                    }
+                                });
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
+
+        }
+    }
+
+    public class ClientClass extends Thread{
+        String hostAdd;
+        private InputStream inputStream;
+        private OutputStream outputStream;
+
+        public ClientClass(InetAddress hostAddress){
+            hostAdd = hostAddress.getHostAddress();
+            socket = new Socket();
+        }
+
+        public void write(byte[] bytes){
+            try {
+                outputStream.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run(){
+            try {
+                socket.connect(new InetSocketAddress(hostAdd, 8888), 500);
+                inputStream = socket.getInputStream();
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            final Handler handler = new Handler(Looper.getMainLooper());
+
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final byte[] buffer = new byte[1024];
+                    int bytes;
+
+                    while (socket != null){
+                        try {
+                            bytes = inputStream.read(buffer);
+                            if(bytes>0){
+                                final int finalBytes = bytes;
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        String tempMSG = new String(buffer, 0, finalBytes);
+                                        messageTextView.setText(tempMSG);
+                                    }
+                                });
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+        }
     }
 }
