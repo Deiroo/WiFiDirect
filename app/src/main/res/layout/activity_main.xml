@@ -10,54 +10,49 @@
         android:id="@+id/btnOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="291dp"
-        android:layout_marginBottom="654dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="28dp"
         android:text="ON/OFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnDiscover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="146dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="177dp"
-        android:layout_marginBottom="654dp"
-        android:text="DISCOVER"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="28dp"
+        android:text="DESCUBRIR"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="371dp"
+        android:layout_height="202dp"
         android:layout_marginTop="128dp"
         android:layout_marginBottom="303dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.173" />
 
     <TextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
-        android:layout_marginTop="476dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="176dp"
-        android:layout_marginBottom="236dp"
-        android:text="Message"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Mensaje"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTypeMsg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintVertical_bias="0.198" />
 
     <TextView
         android:id="@+id/tvConnectionStatus"
@@ -70,33 +65,41 @@
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="690dp"
+        android:id="@+id/editTextTypeMsg"
+        android:layout_width="319dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="152dp"
+
         android:ems="10"
         android:inputType="textPersonName"
-        android:id="@+id/editTextTypeMsg"
-
-        android:text="Name"
+        android:text="texto"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.173"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintVertical_bias="0.951" />
 
     <ImageButton
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="355dp"
-        android:layout_marginTop="684dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="148dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/editTextTypeMsg"
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_menu_send" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

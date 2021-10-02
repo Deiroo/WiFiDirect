@@ -33,6 +33,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -90,7 +92,11 @@ public class MainActivity extends AppCompatActivity {
                 manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
                     @Override
                     public void onSuccess() {
-                        connectionStatus.setText("Se está buscando dispositivos");
+                        try{
+                            connectionStatus.setText("Se está buscando dispositivos");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -166,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
     WifiP2pManager.PeerListListener peerListListener = new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
-            if(!wifiP2pDeviceList.equals(peers)){
+            Collection<WifiP2pDevice> listDevices = wifiP2pDeviceList.getDeviceList();
+            if(!listDevices.equals(peers)){
                 peers.clear();
                 peers.addAll(wifiP2pDeviceList.getDeviceList());
 
@@ -177,7 +184,21 @@ public class MainActivity extends AppCompatActivity {
                 for(WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()){
                     deviceNameArray[index] = device.deviceName;
                     deviceArray[index] = device;
+                    ++index;
                 }
+
+                ArrayList<String> listNameArray = new ArrayList<String>();
+                for (String name : deviceNameArray)
+                    if (name != null) {
+                        listNameArray.add(name);
+                    }
+                ArrayList<WifiP2pDevice> listDeviceArray = new ArrayList<WifiP2pDevice>();
+                for (WifiP2pDevice device : deviceArray)
+                    if (device != null) {
+                        listDeviceArray.add(device);
+                    }
+                deviceNameArray = listNameArray.toArray(new String[listNameArray.size()]);
+                deviceArray = listDeviceArray.toArray(new WifiP2pDevice[listDeviceArray.size()]);
 
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, deviceNameArray);
                 listView.setAdapter(adapter);
@@ -303,38 +324,38 @@ public class MainActivity extends AppCompatActivity {
                 socket.connect(new InetSocketAddress(hostAdd, 8888), 500);
                 inputStream = socket.getInputStream();
                 outputStream = socket.getOutputStream();
+
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                final Handler handler = new Handler(Looper.getMainLooper());
+
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        final byte[] buffer = new byte[1024];
+                        int bytes;
+
+                        while (socket != null){
+                            try {
+                                bytes = inputStream.read(buffer);
+                                if(bytes>0){
+                                    final int finalBytes = bytes;
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String tempMSG = new String(buffer, 0, finalBytes);
+                                            messageTextView.setText(tempMSG);
+                                        }
+                                    });
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            final Handler handler = new Handler(Looper.getMainLooper());
-
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    final byte[] buffer = new byte[1024];
-                    int bytes;
-
-                    while (socket != null){
-                        try {
-                            bytes = inputStream.read(buffer);
-                            if(bytes>0){
-                                final int finalBytes = bytes;
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        String tempMSG = new String(buffer, 0, finalBytes);
-                                        messageTextView.setText(tempMSG);
-                                    }
-                                });
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
         }
     }
 }
