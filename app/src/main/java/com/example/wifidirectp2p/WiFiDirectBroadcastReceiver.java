@@ -28,8 +28,9 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             //call Wifip2pmanager.requestpeers() to get list of current peers
             if(p2pManager != null){
                 p2pManager.requestPeers(channel, activity.peerListListener);
+            } else {
+                Log.e("MANAGER NULO", "EL MANAGER NO ESTÁ INICIALIZADO");
             }
-            Log.e("MANAGER NULO", "EL MANAGER NO ESTÁ INICIALIZADO");
         } else if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
         {
             //responde to new connection or disconnections
