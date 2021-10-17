@@ -70,7 +70,7 @@ public class ServerWifiDirectSocket extends Thread {
                             handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //ACA SE RECIBEN LOS MENSAJES
+                                    //ACA SE RECIBEN LOS MENSAJES DEL SERVER
                                     String tempMsg = new String(buffer, 0, finalBytes);
                                     //puede ser nulo, se puede modificar a futuro para cambiar la estructura de los mensajes
                                     //se puede convertir de texto a JSON si Fuera Necesario
