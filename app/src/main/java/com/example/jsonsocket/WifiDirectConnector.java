@@ -1,27 +1,15 @@
 package com.example.jsonsocket;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.os.Looper;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.example.wifidirectp2p.MainActivity;
-import com.example.wifidirectp2p.WiFiDirectBroadcastReceiver;
-
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -187,8 +175,8 @@ public class WifiDirectConnector {
         });
     }
 
-    public void initPeerListListener(final ListView listView, final TextView connectionStatus, final Context applicationContext) {
-        peerListListener = new WifiP2pManager.PeerListListener() {
+    public WifiP2pManager.PeerListListener initPeerListListener(final ListView listView, final TextView connectionStatus, final Context applicationContext) {
+        return new WifiP2pManager.PeerListListener() {
             @Override
             public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
                 Collection<WifiP2pDevice> listDevices = wifiP2pDeviceList.getDeviceList();
@@ -236,8 +224,8 @@ public class WifiDirectConnector {
         };
     }
 
-    public void initConnectionInfoListener(final TextView connectionStatus, final TextView messageTextView) {
-        connectionInfoListener = new WifiP2pManager.ConnectionInfoListener() {
+    public WifiP2pManager.ConnectionInfoListener initConnectionInfoListener(final TextView connectionStatus, final TextView messageTextView) {
+        return new WifiP2pManager.ConnectionInfoListener() {
             @Override
             public void onConnectionInfoAvailable(WifiP2pInfo info) {
 //                final InetAddress groupOwnerAddress = info.groupOwnerAddress;

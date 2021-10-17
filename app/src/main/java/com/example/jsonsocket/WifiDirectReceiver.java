@@ -8,9 +8,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.jsonsocket.interfaces.IPeerListReceivers;
-import com.example.wifidirectp2p.MainActivity;
-
 public class WifiDirectReceiver extends BroadcastReceiver {
     private WifiP2pManager p2pManager;
     private WifiP2pManager.Channel channel;

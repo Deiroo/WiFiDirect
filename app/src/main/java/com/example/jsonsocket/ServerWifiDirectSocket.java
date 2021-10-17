@@ -4,8 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

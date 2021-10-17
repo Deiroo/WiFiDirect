@@ -8,16 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+
 import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,18 +23,6 @@ import android.widget.TextView;
 import com.example.jsonsocket.WifiDirectConnector;
 import com.example.jsonsocket.WifiDirectReceiver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+//        wifiDirectConnector.setPeerListListener(wifiDirectConnector.initPeerListListener(listView, connectionStatus, getApplicationContext()));
+//        wifiDirectConnector.setConnectionInfoListener(wifiDirectConnector.initConnectionInfoListener(connectionStatus,messageTextView));
 
         initialWork();
 
@@ -163,6 +148,9 @@ public class MainActivity extends AppCompatActivity {
         typeMsg = findViewById(R.id.editTextTypeMsg);
         sendButton = findViewById(R.id.sendButton);
 
+        wifiDirectConnector.setPeerListListener(wifiDirectConnector.initPeerListListener(listView, connectionStatus, getApplicationContext()));
+        wifiDirectConnector.setConnectionInfoListener(wifiDirectConnector.initConnectionInfoListener(connectionStatus,messageTextView));
+
         //seteamos el manager de wifip2p con el contexto del sistema
         wifiDirectConnector.setManager((WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE));
 
@@ -175,8 +163,10 @@ public class MainActivity extends AppCompatActivity {
         receiver = new WifiDirectReceiver(wifiDirectConnector.getManager(), wifiDirectConnector.getChannel(),
                 wifiDirectConnector.getPeerListListener(), wifiDirectConnector.getConnectionInfoListener(), connectionStatus);
 
-        wifiDirectConnector.initPeerListListener(listView, connectionStatus, getApplicationContext());
-        wifiDirectConnector.initConnectionInfoListener(connectionStatus,messageTextView);
+
+
+//        wifiDirectConnector.initPeerListListener(listView, connectionStatus, getApplicationContext());
+//        wifiDirectConnector.initConnectionInfoListener(connectionStatus,messageTextView);
 
         intentFilter = new IntentFilter();
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
