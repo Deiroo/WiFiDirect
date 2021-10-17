@@ -15,6 +15,15 @@ public class WifiDirectReceiver extends BroadcastReceiver {
     private WifiP2pManager.ConnectionInfoListener connectionInfoListener;
     private TextView connectionStatus;
 
+    /**
+     * Esta clase abstraera las acciones y eventos
+     * @param p2pManager, Esta clase proporciona la API para administrar la conectividad Wi-Fi peer-to-peer.
+     * @param channel, Canal que conecta la aplicación al framework Wifi p2p.
+     * @param peerListListener, Interfaz para invocación de devolución de llamada cuando la lista de pares está disponible
+     * @param connectionInfoListener, Interfaz para invocación de devolución de llamada cuando la información de conexión está disponible
+     * @param connectionStatus, Un elemento de la interfaz de usuario que muestra texto al usuario(puede ser nulo)
+     */
+
     public WifiDirectReceiver(WifiP2pManager p2pManager, WifiP2pManager.Channel channel,
                               WifiP2pManager.PeerListListener peerListListener,
                               WifiP2pManager.ConnectionInfoListener connectionInfoListener,
@@ -27,6 +36,9 @@ public class WifiDirectReceiver extends BroadcastReceiver {
         this.connectionInfoListener = connectionInfoListener;
     }
 
+    /**
+     * Recibe los eventos de cambio de estados
+     * */
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
