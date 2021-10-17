@@ -4,6 +4,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
 
+import com.example.jsonsocket.jsonsEntities.JsonEntity;
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,6 +21,8 @@ public class ServerWifiDirectSocket extends Thread {
     ServerSocket serverSocket;
     private InputStream inputStream;
     private OutputStream outputStream;
+
+    Gson gson = new Gson();
 
     TextView messageTextView = null;
 
@@ -69,8 +74,9 @@ public class ServerWifiDirectSocket extends Thread {
                                     String tempMsg = new String(buffer, 0, finalBytes);
                                     //puede ser nulo, se puede modificar a futuro para cambiar la estructura de los mensajes
                                     //se puede convertir de texto a JSON si Fuera Necesario
+                                    JsonEntity jsonEntity = gson.fromJson(tempMsg, JsonEntity.class);
                                     if (messageTextView != null) {
-                                        messageTextView.setText(tempMsg);
+                                        messageTextView.setText(jsonEntity.getMessage());
                                     }
                                 }
                             });

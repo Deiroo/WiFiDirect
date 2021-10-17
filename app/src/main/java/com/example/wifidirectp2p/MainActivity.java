@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.example.jsonsocket.WifiDirectConnector;
 import com.example.jsonsocket.WifiDirectReceiver;
+import com.example.jsonsocket.jsonsEntities.JsonEntity;
+import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     BroadcastReceiver receiver;
     IntentFilter intentFilter;
+
+    Gson gson = new Gson();
 
     WifiDirectConnector wifiDirectConnector = new WifiDirectConnector();
 
@@ -80,7 +84,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String msg = typeMsg.getText().toString();
-                wifiDirectConnector.sendMessage(msg);
+                JsonEntity jsonEntity = new JsonEntity();
+                jsonEntity.setMessage(msg);
+                String jsonMessage = gson.toJson(jsonEntity);
+
+                wifiDirectConnector.sendMessage(jsonMessage);
 
             }
         });
