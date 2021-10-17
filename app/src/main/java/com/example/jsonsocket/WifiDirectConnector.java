@@ -120,6 +120,10 @@ public class WifiDirectConnector {
 
     //end getters and setters
 
+    /**
+     * Este metodo enviare mensajes
+     * @param connectionStatus, textView
+     */
     public void discoverPeers(final TextView connectionStatus) {
         manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
             @Override
@@ -137,7 +141,9 @@ public class WifiDirectConnector {
             }
         });
     }
-
+    /**
+     * Conectar dispositivos
+     */
     public void connectDevice(final TextView connectionStatus, WifiP2pConfig config, final WifiP2pDevice device) {
         manager.connect(channel, config, new WifiP2pManager.ActionListener() {
             @Override
@@ -153,6 +159,10 @@ public class WifiDirectConnector {
         });
     }
 
+    /**
+     * Este metodo enviare mensajes
+     * @param message, Mensaje a enviar
+     */
     public void sendMessage(final String message) {
         //ACA SE ENVIAN LOS MENSAJES
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -167,7 +177,9 @@ public class WifiDirectConnector {
             }
         });
     }
-
+    /**
+     * Escuchando los pares
+     */
     public WifiP2pManager.PeerListListener initPeerListListener(final ListView listView, final TextView connectionStatus, final Context applicationContext) {
         return new WifiP2pManager.PeerListListener() {
             @Override
@@ -216,7 +228,9 @@ public class WifiDirectConnector {
             }
         };
     }
-
+    /**
+     * init el info de conector
+     */
     public WifiP2pManager.ConnectionInfoListener initConnectionInfoListener(final TextView connectionStatus, final TextView messageTextView) {
         return new WifiP2pManager.ConnectionInfoListener() {
             @Override
