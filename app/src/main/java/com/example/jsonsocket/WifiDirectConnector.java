@@ -17,17 +17,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class WifiDirectConnector {
-    //TextView connectionStatus, messageTextView;
-//    Button aSwitch, discoverButton;
-    //ListView listView;
-//    EditText typeMsg;
-//    ImageButton sendButton;
 
     private WifiP2pManager manager;
     private WifiP2pManager.Channel channel;
 
-    //BroadcastReceiver receiver;
-    //IntentFilter intentFilter;
 
     private List<WifiP2pDevice> peers = new ArrayList<>();
     private String[] deviceNameArray;
@@ -228,23 +221,8 @@ public class WifiDirectConnector {
         return new WifiP2pManager.ConnectionInfoListener() {
             @Override
             public void onConnectionInfoAvailable(WifiP2pInfo info) {
-//                final InetAddress groupOwnerAddress = info.groupOwnerAddress;
-//                if(info.groupFormed && info.isGroupOwner){
-//                    if(connectionStatus!=null) {
-//                        connectionStatus.setText("Anfitrión");
-//                    }
-//
-//                    isHost = true;
-//                    serverClass = serverClassAct;
-//                    serverClass.start();
-//                } else if(info.groupFormed){
-//                    if(connectionStatus!=null) {
-//                        connectionStatus.setText("Cliente");
-//                    }
-//                    isHost = false;
-//                    clientClass = clientClassAct;
-//                    clientClass.start();
-//                }
+
+
                 final InetAddress groupOwnerAddress = info.groupOwnerAddress;
                 if(info.groupFormed && info.isGroupOwner){
                     connectionStatus.setText("Anfitrión");

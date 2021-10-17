@@ -51,7 +51,6 @@ public class WifiDirectReceiver extends BroadcastReceiver {
                     p2pManager.requestConnectionInfo(channel, connectionInfoListener);
                 } else{
                     //Interfaz, probar luego si funciona
-                    //.setText("No se ha podido conectar");
                     if(connectionStatus!=null) {
                         connectionStatus.setText("No se ha podido conectar");
                     }
