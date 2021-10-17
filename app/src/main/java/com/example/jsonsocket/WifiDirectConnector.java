@@ -249,7 +249,7 @@ public class WifiDirectConnector {
                 if(info.groupFormed && info.isGroupOwner){
                     connectionStatus.setText("Anfitrión");
                     isHost = true;
-                    serverClass = new ServerWifiDirectSocket();
+                    serverClass = new ServerWifiDirectSocket(messageTextView);
                     serverClass.start();
                 } else if(info.groupFormed){
                     connectionStatus.setText("Cliente");
